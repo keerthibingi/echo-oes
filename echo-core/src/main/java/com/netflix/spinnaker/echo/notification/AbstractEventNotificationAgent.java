@@ -70,8 +70,8 @@ public abstract class AbstractEventNotificationAgent implements EventListener {
   @Override
   public void processEvent(Event event) {
     if (log.isDebugEnabled() && mapper != null && !event.getDetails().getType().equals("pubsub")) {
-      log.debug(
-          "Event received: {}", mapper.writerWithDefaultPrettyPrinter().writeValueAsString(event));
+/*      log.debug(
+          "Event received: {}", mapper.writerWithDefaultPrettyPrinter().writeValueAsString(event));*/
     }
 
     if (!event.getDetails().getType().startsWith("orca:")) {

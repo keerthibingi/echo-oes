@@ -66,13 +66,13 @@ public class GooglePubsubNotificationEventListener extends AbstractEventNotifica
   @Override
   public EchoResponse.Void handle(Notification notification) {
     if (log.isDebugEnabled() && mapper != null) {
-      try {
+/*      try {
         log.debug(
             "Notification received: "
                 + mapper.writerWithDefaultPrettyPrinter().writeValueAsString(notification));
       } catch (JsonProcessingException jpe) {
         log.warn("Error parsing notification", jpe);
-      }
+      }*/
     }
 
     if (notification.getTo() == null || notification.getTo().isEmpty()) {
