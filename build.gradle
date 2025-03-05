@@ -13,7 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+buildscript {
+  ext {
+    junitPlatformVersion = "1.0.2"
+  }
 
+  repositories {
+    gradlePluginPortal()
+  }
+
+  dependencies {
+    classpath "org.junit.platform:junit-platform-gradle-plugin:${junitPlatformVersion}"
+  }
+}
 plugins {
   id 'io.spinnaker.project' version "$spinnakerGradleVersion" apply false
   id "org.jetbrains.kotlin.jvm" version "$kotlinVersion" apply false
@@ -35,7 +47,7 @@ subprojects {
     repositories {
       mavenLocal()
       maven{
-        url "https://nexus1.opsmx.net/repository/maven-snapshots/"
+        url "NEXUS_URL"
         credentials {
           username = "NEXUS_USERNAME"
           password = "NEXUS_PASSWORD"
