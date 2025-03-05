@@ -22,6 +22,7 @@ import com.netflix.spinnaker.kork.artifacts.parsing.ArtifactExtractor;
 import com.netflix.spinnaker.kork.core.RetrySupport;
 import com.netflix.spinnaker.security.AuthenticatedRequest;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import lombok.AccessLevel;
@@ -53,10 +54,12 @@ public class GoogleCloudBuildArtifactExtractor implements ArtifactExtractor {
 
   @Override
   public List<Artifact> getArtifacts(String messagePayload) {
+    log.info("**********Start of the get Artifacts - GoogleCloudBuildArtifactExtractor");
+    List<Artifact> artifacts = new ArrayList<>();
     TypedInput build =
         new TypedByteArray("application/json", messagePayload.getBytes(StandardCharsets.UTF_8));
     try {
-      return retrySupport.retry(
+      artifacts =  retrySupport.retry(
           () ->
               AuthenticatedRequest.allowAnonymous(
                   () -> igorService.extractGoogleCloudBuildArtifacts(account, build)),
@@ -67,5 +70,8 @@ public class GoogleCloudBuildArtifactExtractor implements ArtifactExtractor {
       log.error("Failed to fetch artifacts for build: {}", e);
       return Collections.emptyList();
     }
+    log.info("*****extractGoogleCloudBuildArtifacts size:{}", artifacts.size());
+    log.info("**********End of the get Artifacts - GoogleCloudBuildArtifactExtractor");
+    return artifacts;
   }
 }

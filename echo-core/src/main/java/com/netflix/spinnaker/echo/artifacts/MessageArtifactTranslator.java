@@ -24,19 +24,23 @@ import java.io.InputStream;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+@Slf4j
 public class MessageArtifactTranslator {
   private final ArtifactExtractor artifactExtractor;
   private final ApplicationEventPublisher applicationEventPublisher;
 
   public List<Artifact> parseArtifacts(String messagePayload) {
+    log.info(" Start of the parseArtifacts - MessageArtifactTranslator");
     List<Artifact> artifacts = artifactExtractor.getArtifacts(messagePayload);
     if (!artifacts.isEmpty()) {
       applicationEventPublisher.publishEvent(new ArtifactEvent(null, artifacts));
     }
+    log.info(" End of the parseArtifacts - MessageArtifactTranslator");
     return artifacts;
   }
 

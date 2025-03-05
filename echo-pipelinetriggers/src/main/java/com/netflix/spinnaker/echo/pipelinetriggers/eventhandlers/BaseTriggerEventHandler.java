@@ -117,8 +117,14 @@ public abstract class BaseTriggerEventHandler<T extends TriggerEvent>
   }
 
   private Optional<Pipeline> withMatchingTrigger(T event, Trigger trigger) {
+    log.info("****** Start of the withMatchingTrigger - BaseTriggerEventHandler");
+    Optional<Pipeline> optionalPipeline;
+    log.info(" event Id;{}",event.getEventId());
+    log.info(" event details :{}",event.getDetails());
+    log.info(" event payload :{}",event.getPayload());
+    log.info(" event Raw content :{}",event.getRawContent());
     try {
-      return Stream.of(trigger)
+      optionalPipeline =  Stream.of(trigger)
           .map(buildTrigger(event))
           .map(t -> new TriggerWithArtifacts(t, getArtifacts(event, t)))
           .filter(
@@ -136,6 +142,9 @@ public abstract class BaseTriggerEventHandler<T extends TriggerEvent>
       onSubscriberError(e);
       return Optional.empty();
     }
+    log.info("**** with matching pipeline :{}",optionalPipeline.get());
+    log.info("****** End of the withMatchingTrigger - BaseTriggerEventHandler");
+    return optionalPipeline;
   }
 
   private void onSubscriberError(Throwable error) {

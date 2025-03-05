@@ -55,12 +55,15 @@ public class TriggerMonitor<T extends TriggerEvent> implements EventListener {
   }
 
   public void processEvent(Event event) {
+    log.debug("Start of the processEvent - TriggerMonitor");
+
     validateEvent(event);
     if (eventHandler.handleEventType(event.getDetails().getType())) {
       recordMetrics();
       T triggerEvent = eventHandler.convertEvent(event);
       triggerMatchingPipelines(triggerEvent);
     }
+    log.debug("End of the processEvent - TriggerMonitor");
   }
 
   private void validateEvent(Event event) {
@@ -75,6 +78,7 @@ public class TriggerMonitor<T extends TriggerEvent> implements EventListener {
     log.debug("Start of the trigger matching Pipelines - TriggerMonitor");
     try {
       List<Pipeline> matchingPipelines = eventHandler.getMatchingPipelines(event, pipelineCache);
+      log.info("****** matchingPipelines :{}",matchingPipelines);
       matchingPipelines.stream()
           .filter(p -> Strings.isNullOrEmpty(p.getErrorMessage()))
           .map(pipelinePostProcessorHandler::process)

@@ -107,20 +107,15 @@ public class PubsubEventHandler extends BaseTriggerEventHandler<PubsubEvent> {
 
   @Override
   protected boolean isValidTrigger(Trigger trigger) {
-    log.info("Start of the isValidTrigger --PubsubEventHandler");
-    log.info(" Trigger enabled :{}",trigger.isEnabled());
-    log.info("is Pubsub Trigger :{}",isPubsubTrigger(trigger));
-    log.info("End of the isValidTrigger --PubsubEventHandler");
     return trigger.isEnabled() && isPubsubTrigger(trigger);
   }
 
   @Override
   protected Predicate<Trigger> matchTriggerFor(PubsubEvent pubsubEvent) {
     log.info("Start of the matchTriggerFor --PubsubEventHandler");
-    MessageDescription description = pubsubEvent.getContent().getMessageDescription();
     log.info(" pub sub event payload :{}",pubsubEvent.getPayload());
-    log.info(" description PubsubSystem :{}",description.getSubscriptionName());
-
+    MessageDescription description = pubsubEvent.getContent().getMessageDescription();
+    log.info("description PubsubSystem :{}",description.getSubscriptionName());
     log.info("description  Message Attributes :{}",description.getMessageAttributes());
     log.info("End of the matchTriggerFor --PubsubEventHandler");
 

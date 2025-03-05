@@ -63,6 +63,7 @@ public class EventPropagator {
   }
 
   public void processEvent(Event event) {
+    log.info("Start of the ProcessEvent - EventPropagator");
     Observable.from(eventListeners())
         .map(
             listener ->
@@ -80,5 +81,6 @@ public class EventPropagator {
                 log.error("failed processing event: {}", event, e);
               }
             });
+      log.info("End of the ProcessEvent - EventPropagator");
   }
 }

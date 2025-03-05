@@ -48,7 +48,6 @@ public class PubsubEventCreator implements EventCreator {
   public Event createEvent(MessageDescription description) {
     log.info("*******Start of the create event --PubsubEventCreator");
     log.info("Processing pubsub event with payload {}", description.getMessagePayload());
-
     try {
       description.setArtifacts(parseArtifacts(description.getMessagePayload()));
     } catch (FatalTemplateErrorsException e) {
@@ -79,6 +78,7 @@ public class PubsubEventCreator implements EventCreator {
   }
 
   private List<Artifact> parseArtifacts(String messagePayload) {
+    log.info(" Start of the parseArtifacts - PubsubEventCreator");
     if (!messageArtifactTranslator.isPresent()) {
       return Collections.emptyList();
     }
@@ -88,6 +88,7 @@ public class PubsubEventCreator implements EventCreator {
         || StringUtils.isEmpty(artifacts.get(0).getReference())) {
       return Collections.emptyList();
     }
+    log.info(" End of the parseArtifacts - PubsubEventCreator");
     return artifacts;
   }
 }
