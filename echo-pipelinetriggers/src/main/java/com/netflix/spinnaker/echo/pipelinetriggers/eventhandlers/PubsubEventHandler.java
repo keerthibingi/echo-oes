@@ -119,7 +119,7 @@ public class PubsubEventHandler extends BaseTriggerEventHandler<PubsubEvent> {
     log.info("description  Message Attributes :{}",description.getMessageAttributes());
     log.info("End of the matchTriggerFor --PubsubEventHandler");
 
-    return trigger ->
+    Predicate<Trigger> t =  trigger ->
         supportedTriggerTypes().contains(trigger.getType())
             && trigger.getPubsubSystem().equalsIgnoreCase(description.getPubsubSystem().toString())
             && trigger.getSubscriptionName().equalsIgnoreCase(description.getSubscriptionName())
@@ -128,6 +128,9 @@ public class PubsubEventHandler extends BaseTriggerEventHandler<PubsubEvent> {
             && (trigger.getAttributeConstraints() == null
                 || isConstraintInPayload(
                     trigger.getAttributeConstraints(), description.getMessageAttributes()));
+    log.info("******* trigger :{}",t.toString());
+    log.info("End of the matchTriggerFor --PubsubEventHandler");
+    return t;
   }
 
   @Override
