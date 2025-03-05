@@ -86,11 +86,13 @@ public class PubsubMessageHandler {
       MessageAcknowledger acknowledger,
       String identifier,
       String messageId) {
+    log.info("*******Start of the handle Message - PubsubMessageHandler");
     if (redisClientDelegate == null) {
       throw new IllegalStateException("Redis not enabled, pubsub requires redis. Please enable.");
     }
 
     String completeKey = makeCompletedKey(description, messageId);
+    log.info("******* completeKey ;{}",completeKey);
     if (messageComplete(completeKey, description.getMessagePayload())) {
       // Acknowledge duplicate messages but don't process them
       acknowledger.ack();
@@ -99,15 +101,22 @@ public class PubsubMessageHandler {
     }
 
     String processingKey = makeProcessingKey(description, messageId);
+    log.info("******* processingKey ;{}",processingKey);
     if (tryAck(processingKey, description.getAckDeadlineSeconds(), acknowledger, identifier)) {
+      log.info("Start of the create event and process with eventPropagator");
       for (EventCreator eventCreator : eventCreators) {
+        log.info("***** Event Creator :{}",eventCreator);
         Event event = eventCreator.createEvent(description);
+        log.info("***** Start of the process event with eventPropagator ");
         eventPropagator.processEvent(event);
+        log.info("***** End of the process event with eventPropagator ");
       }
+      log.info("End of the create event and process with eventPropagator");
       setMessageComplete(
           completeKey, description.getMessagePayload(), description.getRetentionDeadlineSeconds());
       registry.counter(getProcessedMetricId(description)).increment();
     }
+    log.info("*******End of the handle Message - PubsubMessageHandler");
   }
 
   private boolean tryAck(

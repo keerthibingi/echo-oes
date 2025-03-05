@@ -46,7 +46,8 @@ public class PubsubEventCreator implements EventCreator {
   }
 
   public Event createEvent(MessageDescription description) {
-    log.trace("Processing pubsub event with payload {}", description.getMessagePayload());
+    log.info("*******Start of the create event --PubsubEventCreator");
+    log.info("Processing pubsub event with payload {}", description.getMessagePayload());
 
     try {
       description.setArtifacts(parseArtifacts(description.getMessagePayload()));
@@ -73,6 +74,7 @@ public class PubsubEventCreator implements EventCreator {
 
     event.setContent(content);
     event.setDetails(details);
+    log.info("*******End of the create event --PubsubEventCreator");
     return event;
   }
 

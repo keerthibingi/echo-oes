@@ -171,6 +171,7 @@ public class GooglePubsubSubscriber implements PubsubSubscriber {
 
     @Override
     public void receiveMessage(PubsubMessage message, AckReplyConsumer consumer) {
+      log.info("********** Start of the receive message -- GooglePubsubSubscriber");
       String messagePayload = message.getData().toStringUtf8();
       String messageId = message.getMessageId();
       Map<String, String> messageAttributes =
@@ -191,9 +192,11 @@ public class GooglePubsubSubscriber implements PubsubSubscriber {
                   7 * 24 * 60 * 60) // Expire key after max retention time, which is 7 days.
               .build();
       GoogleMessageAcknowledger acknowledger = new GoogleMessageAcknowledger(consumer);
-
+      log.info("********** Start of the handle message -- pubsubMessageHandler");
       pubsubMessageHandler.handleMessage(
           description, acknowledger, identity.getIdentity(), messageId);
+      log.info("********** End of the handle message -- pubsubMessageHandler");
+      log.info("********** End of the receive message -- GooglePubsubSubscriber");
     }
   }
 

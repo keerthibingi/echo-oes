@@ -34,7 +34,8 @@ public class GoogleCloudBuildEventCreator implements EventCreator {
   private static final String EVENT_TYPE = "googleCloudBuild";
 
   public Event createEvent(MessageDescription description) {
-    log.debug("Processing pubsub event with payload {}", description.getMessagePayload());
+    log.info("*******Start of the create event --GoogleCloudBuildEventCreator");
+    log.info("Processing pubsub event with payload {}", description.getMessagePayload());
 
     var event = new Event();
     Map<String, Object> content = new HashMap<>();
@@ -45,6 +46,7 @@ public class GoogleCloudBuildEventCreator implements EventCreator {
 
     event.setContent(content);
     event.setDetails(details);
+    log.info("*******End of the create event --GoogleCloudBuildEventCreator");
     return event;
   }
 }
