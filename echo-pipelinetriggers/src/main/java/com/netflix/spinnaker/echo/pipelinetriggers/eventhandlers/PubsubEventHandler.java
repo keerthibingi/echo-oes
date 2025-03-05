@@ -32,6 +32,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Predicate;
+
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -39,6 +41,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * Implementation of TriggerEventHandler for events of type {@link PubsubEvent}, which occur when a
  * pubsub message is received.
  */
+@Slf4j
 public class PubsubEventHandler extends BaseTriggerEventHandler<PubsubEvent> {
   public static final String PUBSUB_TRIGGER_TYPE = "pubsub";
   private static final List<String> supportedTriggerTypes =
@@ -74,10 +77,12 @@ public class PubsubEventHandler extends BaseTriggerEventHandler<PubsubEvent> {
 
   @Override
   protected Function<Trigger, Trigger> buildTrigger(PubsubEvent pubsubEvent) {
+    log.info("Start of the Build Trigger - PubsubEventHandler");
     Map payload = pubsubEvent.getPayload();
     Map parameters =
         payload.containsKey("parameters") ? (Map) payload.get("parameters") : new HashMap();
     MessageDescription description = pubsubEvent.getContent().getMessageDescription();
+    log.info("End of the Build Trigger - PubsubEventHandler");
     return inputTrigger -> {
       Trigger trigger =
           inputTrigger
@@ -102,12 +107,22 @@ public class PubsubEventHandler extends BaseTriggerEventHandler<PubsubEvent> {
 
   @Override
   protected boolean isValidTrigger(Trigger trigger) {
+    log.info("Start of the isValidTrigger --PubsubEventHandler");
+    log.info(" Trigger enabled :{}",trigger.isEnabled());
+    log.info("is Pubsub Trigger :{}",isPubsubTrigger(trigger));
+    log.info("End of the isValidTrigger --PubsubEventHandler");
     return trigger.isEnabled() && isPubsubTrigger(trigger);
   }
 
   @Override
   protected Predicate<Trigger> matchTriggerFor(PubsubEvent pubsubEvent) {
+    log.info("Start of the matchTriggerFor --PubsubEventHandler");
     MessageDescription description = pubsubEvent.getContent().getMessageDescription();
+    log.info(" pub sub event payload :{}",pubsubEvent.getPayload());
+    log.info(" description PubsubSystem :{}",description.getSubscriptionName());
+
+    log.info("description  Message Attributes :{}",description.getMessageAttributes());
+    log.info("End of the matchTriggerFor --PubsubEventHandler");
 
     return trigger ->
         supportedTriggerTypes().contains(trigger.getType())
