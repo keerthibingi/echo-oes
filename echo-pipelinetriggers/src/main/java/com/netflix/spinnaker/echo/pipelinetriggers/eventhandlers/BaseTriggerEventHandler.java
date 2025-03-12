@@ -140,9 +140,15 @@ public abstract class BaseTriggerEventHandler<T extends TriggerEvent>
                       .withReceivedArtifacts(ta.artifacts));
     } catch (Exception e) {
       onSubscriberError(e);
+      log.info("**** exception occur  :{}",e);
+      log.info("****** End of the withMatchingTrigger - BaseTriggerEventHandler");
       return Optional.empty();
     }
-    log.info("**** with matching pipeline :{}",optionalPipeline.get());
+    if(!optionalPipeline.isEmpty()){
+      log.info("**** with matching pipeline :{}",optionalPipeline.get());
+    }else{
+      log.info("**** No pipeline were present with matching trigger");
+    }
     log.info("****** End of the withMatchingTrigger - BaseTriggerEventHandler");
     return optionalPipeline;
   }
