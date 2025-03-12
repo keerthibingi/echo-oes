@@ -39,6 +39,7 @@ public class ArtifactMatcher {
       List<Artifact> messageArtifacts,
       Trigger trigger,
       List<ExpectedArtifact> pipelineExpectedArtifacts) {
+    log.info("***** Start of the anyArtifactsMatchExpected");
     messageArtifacts = messageArtifacts == null ? new ArrayList<>() : messageArtifacts;
     List<String> expectedArtifactIds = trigger.getExpectedArtifactIds();
 
@@ -67,6 +68,8 @@ public class ArtifactMatcher {
     if (!result) {
       log.info("Skipping trigger {} as artifact constraints were not satisfied", trigger);
     }
+    log.info("***** anyArtifactsMatchExpected :{}",result);
+    log.info("***** End of the anyArtifactsMatchExpected");
     return result;
   }
 
