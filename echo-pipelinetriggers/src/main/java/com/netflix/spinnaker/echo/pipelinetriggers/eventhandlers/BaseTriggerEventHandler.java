@@ -77,6 +77,7 @@ public abstract class BaseTriggerEventHandler<T extends TriggerEvent>
     List<Pipeline> pipelines = new ArrayList<>();
     if (successfulTriggerEvent) {
       log.debug("successfulTriggerEvent - BaseTriggerEventHandler");
+      supportedTriggerTypes().forEach(t -> log.info("Supported triggers :{}",t));
       List<Trigger> triggerList = new ArrayList<>();
           supportedTriggerTypes().forEach(triggerType ->{
                     triggerList.addAll(Optional.ofNullable(triggers.get(triggerType))
