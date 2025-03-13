@@ -62,6 +62,7 @@ public class PubsubEventHandler extends BaseTriggerEventHandler<PubsubEvent> {
 
   @Override
   public boolean handleEventType(String eventType) {
+    log.info(" Event is pub sub comparing :{}", eventType);
     return eventType.equalsIgnoreCase(PubsubEvent.TYPE);
   }
 
