@@ -77,13 +77,13 @@ public abstract class BaseTriggerEventHandler<T extends TriggerEvent>
     List<Pipeline> pipelines = new ArrayList<>();
     if (successfulTriggerEvent) {
       log.debug("successfulTriggerEvent - BaseTriggerEventHandler");
-      pipelines =
-          supportedTriggerTypes().stream()
-              .flatMap(
-                  triggerType ->
-                      Optional.ofNullable(triggers.get(triggerType))
-                          .orElse(Collections.emptyList())
-                          .stream())
+      List<Trigger> triggerList = new ArrayList<>();
+          supportedTriggerTypes().forEach(triggerType ->{
+                    triggerList.addAll(Optional.ofNullable(triggers.get(triggerType))
+                     .orElse(Collections.emptyList()));
+                  });
+      log.info(" trigger size :{}", triggerList.size());
+      pipelines = triggerList.stream()
               .filter(this::isValidTrigger)
               .filter(matchTriggerFor(event))
               .filter(this::canAccessApplication)
