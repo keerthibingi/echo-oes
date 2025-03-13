@@ -81,6 +81,7 @@ public class PubsubEventCreator implements EventCreator {
     log.info(" Start of the parseArtifacts - PubsubEventCreator");
     log.info(" messageArtifactTranslator.isPresent() :{}",messageArtifactTranslator.isPresent());
     if (!messageArtifactTranslator.isPresent()) {
+      log.info(" messageArtifactTranslator not available, Artifacts are empty");
       return Collections.emptyList();
     }
     List<Artifact> artifacts = messageArtifactTranslator.get().parseArtifacts(messagePayload);
