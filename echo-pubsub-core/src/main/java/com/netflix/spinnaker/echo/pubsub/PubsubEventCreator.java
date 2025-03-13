@@ -79,10 +79,17 @@ public class PubsubEventCreator implements EventCreator {
 
   private List<Artifact> parseArtifacts(String messagePayload) {
     log.info(" Start of the parseArtifacts - PubsubEventCreator");
+    log.info(" messageArtifactTranslator.isPresent() :{}",messageArtifactTranslator.isPresent());
     if (!messageArtifactTranslator.isPresent()) {
       return Collections.emptyList();
     }
     List<Artifact> artifacts = messageArtifactTranslator.get().parseArtifacts(messagePayload);
+    artifacts.forEach(artifact ->{ log.info(" artifact name :{}",artifact.getName());
+      log.info(" artifact version :{}",artifact.getVersion());
+      log.info(" artifact provenance:{}",artifact.getProvenance());
+      log.info(" artifact type :{}",artifact.getType());
+      log.info(" artifact reference :{}",artifact.getReference());
+    });
     // Artifact must have at least a reference defined.
     if (CollectionUtils.isEmpty(artifacts)
         || StringUtils.isEmpty(artifacts.get(0).getReference())) {

@@ -117,9 +117,7 @@ public class PubsubEventHandler extends BaseTriggerEventHandler<PubsubEvent> {
     MessageDescription description = pubsubEvent.getContent().getMessageDescription();
     log.info("description PubsubSystem :{}",description.getSubscriptionName());
     log.info("description  Message Attributes :{}",description.getMessageAttributes());
-    log.info("End of the matchTriggerFor --PubsubEventHandler");
-
-    Predicate<Trigger> t =  trigger ->
+        Predicate<Trigger> t =  trigger ->
         supportedTriggerTypes().contains(trigger.getType())
             && trigger.getPubsubSystem().equalsIgnoreCase(description.getPubsubSystem().toString())
             && trigger.getSubscriptionName().equalsIgnoreCase(description.getSubscriptionName())
