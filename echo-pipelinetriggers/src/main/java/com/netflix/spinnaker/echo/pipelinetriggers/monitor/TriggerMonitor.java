@@ -59,7 +59,7 @@ public class TriggerMonitor<T extends TriggerEvent> implements EventListener {
     log.info(" ******Event Id : {}", event.getEventId());
     log.info(" ******Event details: {}", event.getDetails());
     log.info(" ******Event payload: {}", event.getPayload());
-    log.info(" ******Event Content: {}", event.getContent());
+    //log.info(" ******Event Content: {}", event.getContent());
     log.info(" ******validate Event");
     validateEvent(event);
     log.info(" ******validate Event successful");
