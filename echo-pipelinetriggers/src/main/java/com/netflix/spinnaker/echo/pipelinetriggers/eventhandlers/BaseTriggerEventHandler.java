@@ -84,11 +84,10 @@ public abstract class BaseTriggerEventHandler<T extends TriggerEvent>
                      .orElse(Collections.emptyList()));
                   });
       log.info(" trigger size :{}", triggerList.size());
-      triggerList.stream()
+      pipelines = triggerList.stream()
               .filter(this::isValidTrigger)
-              .filter(matchTriggerFor(event));
-      log.info(" matchTriggerFor size :{}", triggerList.size());
-      pipelines = triggerList.stream().filter(this::canAccessApplication)
+              .filter(matchTriggerFor(event))
+              .filter(this::canAccessApplication)
               .map(trigger -> withMatchingTrigger(event, trigger))
               .filter(Optional::isPresent)
               .map(Optional::get)
