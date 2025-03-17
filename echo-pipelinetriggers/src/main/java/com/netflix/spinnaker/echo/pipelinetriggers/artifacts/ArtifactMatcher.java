@@ -84,16 +84,20 @@ public class ArtifactMatcher {
    *     the payload.
    */
   public static boolean isConstraintInPayload(final Map constraints, final Map payload) {
+    log.info(" *********Start of the isConstraintInPayload - ArtifactMatcher");
     for (Object key : constraints.keySet()) {
       if (!payload.containsKey(key) || payload.get(key) == null) {
+        log.info(" *********End of the isConstraintInPayload - ArtifactMatcher  false");
         return false;
       }
 
       if (constraints.get(key) != null
           && !matches(constraints.get(key).toString(), payload.get(key).toString())) {
+        log.info(" *********End of the isConstraintInPayload - ArtifactMatcher  :  false");
         return false;
       }
     }
+    log.info(" *********End of the isConstraintInPayload - ArtifactMatcher true ");
     return true;
   }
 
