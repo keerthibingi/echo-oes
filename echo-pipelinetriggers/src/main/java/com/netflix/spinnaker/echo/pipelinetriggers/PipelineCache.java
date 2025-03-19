@@ -188,7 +188,7 @@ public class PipelineCache implements MonitoredPoller {
     }
 
     try {
-      log.debug("Getting pipelines from Front50...");
+      //log.debug("Getting pipelines from Front50...");
       long start = System.currentTimeMillis();
       pipelines = fetchHydratedPipelines();
 
@@ -197,10 +197,10 @@ public class PipelineCache implements MonitoredPoller {
 
       lastPollTimestamp = now();
       registry.counter("front50.requests").increment();
-      log.debug(
+/*      log.debug(
           "Fetched {} pipeline configs in {}ms",
           pipelines.size(),
-          System.currentTimeMillis() - start);
+          System.currentTimeMillis() - start);*/
     } catch (Exception e) {
       log.error("Error fetching pipelines from Front50", e);
       registry.counter("front50.errors").increment();

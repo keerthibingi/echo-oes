@@ -55,7 +55,7 @@ class PipelineConfigsPollingJob implements Job {
     long start = System.currentTimeMillis()
 
     try {
-      log.info("Running the pipeline configs polling agent...")
+      //log.info("Running the pipeline configs polling agent...")
 
       timeZoneId = TimeZone.getTimeZone(context.mergedJobDataMap.getString("timeZoneId"))
       scheduler = context.scheduler
@@ -67,7 +67,7 @@ class PipelineConfigsPollingJob implements Job {
 
       def pipelineTriggers = new TriggerRepository(pipelinesWithCronTriggers)
 
-      log.debug("Found ${pipelineTriggers.triggers().size()} pipeline CRON triggers that are active")
+      //log.debug("Found ${pipelineTriggers.triggers().size()} pipeline CRON triggers that are active")
 
       removeStaleTriggers(pipelineTriggers)
       updateChangedTriggers(pipelineTriggers)
@@ -78,7 +78,7 @@ class PipelineConfigsPollingJob implements Job {
       metrics.incrementTriggerSyncError();
     } finally {
       long elapsedMillis = System.currentTimeMillis() - start
-      log.info("Done polling for pipeline configs in ${elapsedMillis / 1000}s")
+      //log.info("Done polling for pipeline configs in ${elapsedMillis / 1000}s")
       metrics.recordSyncTime(elapsedMillis)
     }
   }
