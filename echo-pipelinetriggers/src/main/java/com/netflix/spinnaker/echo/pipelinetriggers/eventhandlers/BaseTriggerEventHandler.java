@@ -84,12 +84,6 @@ public abstract class BaseTriggerEventHandler<T extends TriggerEvent>
                      .orElse(Collections.emptyList()));
                   });
       log.info(" trigger avaliable size :{}", triggerList.size());
-      triggerList.forEach( trigger -> {
-        log.info(" trigger application name:{}", trigger.getApplication());
-        log.info(" trigger pipeline name:{}", trigger.getPipeline());
-        log.info(" trigger name:{}", trigger.getApplication());
-
-      });
       List<Trigger> validTriggerList  = triggerList.stream()
                 .filter(this::isValidTrigger).collect(Collectors.toList());
       log.info(" ValidTrigger  size :{}", triggerList.size());
