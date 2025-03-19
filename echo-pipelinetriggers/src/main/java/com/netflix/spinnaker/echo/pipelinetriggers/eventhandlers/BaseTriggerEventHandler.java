@@ -83,22 +83,29 @@ public abstract class BaseTriggerEventHandler<T extends TriggerEvent>
                     triggerList.addAll(Optional.ofNullable(triggers.get(triggerType))
                      .orElse(Collections.emptyList()));
                   });
-      log.info(" trigger size :{}", triggerList.size());
+      log.info(" trigger avaliable size :{}", triggerList.size());
       triggerList.forEach( trigger -> {
-        log.info(" trigger name:{}", trigger.getApplication());
-        log.info(" trigger name:{}", trigger.getPipeline());
+        log.info(" trigger application name:{}", trigger.getApplication());
+        log.info(" trigger pipeline name:{}", trigger.getPipeline());
         log.info(" trigger name:{}", trigger.getApplication());
 
       });
-      pipelines = triggerList.stream()
-              .filter(this::isValidTrigger)
-              .filter(matchTriggerFor(event))
-              .filter(this::canAccessApplication)
+      List<Trigger> validTriggerList  = triggerList.stream()
+                .filter(this::isValidTrigger).collect(Collectors.toList());
+      log.info(" ValidTrigger  size :{}", triggerList.size());
+      List<Trigger> matchTTriggerList  = validTriggerList.stream()
+              .filter(matchTriggerFor(event)).collect(Collectors.toList());
+      log.info(" match trigger  size :{}", triggerList.size());
+      List<Trigger> accessTTriggerList  =  matchTTriggerList.stream()
+              .filter(this::canAccessApplication).collect(Collectors.toList());
+      log.info(" canAccessApplication trigger  size :{}", triggerList.size());
+      pipelines = accessTTriggerList.stream()
               .map(trigger -> withMatchingTrigger(event, trigger))
               .filter(Optional::isPresent)
               .map(Optional::get)
               .distinct()
               .collect(Collectors.toList());
+      log.debug("supproted triggers types final pipelines " + pipelines);
     } else if (unstableTriggerEvent) {
       log.debug("unstableTriggerEvent - BaseTriggerEventHandler");
       pipelines =
