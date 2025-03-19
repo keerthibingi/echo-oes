@@ -77,23 +77,16 @@ public abstract class BaseTriggerEventHandler<T extends TriggerEvent>
     List<Pipeline> pipelines = new ArrayList<>();
     if (successfulTriggerEvent) {
       log.debug("successfulTriggerEvent - BaseTriggerEventHandler");
-      supportedTriggerTypes().forEach(t -> log.info("Supported triggers :{}",t));
-      List<Trigger> triggerList = new ArrayList<>();
-          supportedTriggerTypes().forEach(triggerType ->{
-                    triggerList.addAll(Optional.ofNullable(triggers.get(triggerType))
-                     .orElse(Collections.emptyList()));
-                  });
-      log.info(" trigger avaliable size :{}", triggerList.size());
-      List<Trigger> validTriggerList  = triggerList.stream()
-                .filter(this::isValidTrigger).collect(Collectors.toList());
-      log.info(" ValidTrigger  size :{}", triggerList.size());
-      List<Trigger> matchTTriggerList  = validTriggerList.stream()
-              .filter(matchTriggerFor(event)).collect(Collectors.toList());
-      log.info(" match trigger  size :{}", triggerList.size());
-      List<Trigger> accessTTriggerList  =  matchTTriggerList.stream()
-              .filter(this::canAccessApplication).collect(Collectors.toList());
-      log.info(" canAccessApplication trigger  size :{}", triggerList.size());
-      pipelines = accessTTriggerList.stream()
+      pipelines =
+          supportedTriggerTypes().stream()
+              .flatMap(
+                  triggerType ->
+                      Optional.ofNullable(triggers.get(triggerType))
+                          .orElse(Collections.emptyList())
+                          .stream())
+              .filter(this::isValidTrigger)
+              .filter(matchTriggerFor(event))
+              .filter(this::canAccessApplication)
               .map(trigger -> withMatchingTrigger(event, trigger))
               .filter(Optional::isPresent)
               .map(Optional::get)
