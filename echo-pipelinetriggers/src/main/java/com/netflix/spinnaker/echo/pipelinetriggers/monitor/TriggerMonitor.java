@@ -56,21 +56,11 @@ public class TriggerMonitor<T extends TriggerEvent> implements EventListener {
 
   public void processEvent(Event event) {
     log.info("Start of the processEvent - TriggerMonitor");
-    if( event.getPayload() != null) {
-      log.info(" ******Event Id : {}", event.getEventId());
-      log.info(" ******Event details: {}", event.getDetails());
-      log.info(" ******Event payload: {}", event.getPayload());
-    }else{
-      log.info("Event payload null");
-    }
     //log.info(" ******Event Content: {}", event.getContent());
-    log.info(" ******validate Event");
     validateEvent(event);
-    log.info(" ******validate Event successful");
     if (eventHandler.handleEventType(event.getDetails().getType())) {
       recordMetrics();
       T triggerEvent = eventHandler.convertEvent(event);
-      log.info(" ***** trigger Matching pipelines");
       triggerMatchingPipelines(triggerEvent);
     }
     log.debug("End of the processEvent - TriggerMonitor");
