@@ -92,8 +92,9 @@ public class PubsubMessageHandler {
     }
 
     String completeKey = makeCompletedKey(description, messageId);
-    log.info("******* completeKey ;{}",completeKey);
+    log.info("******* completeKey ;{}", completeKey);
     if (messageComplete(completeKey, description.getMessagePayload())) {
+      log.info("******* Acknowledge duplicate messages but don't process them");
       // Acknowledge duplicate messages but don't process them
       acknowledger.ack();
       registry.counter(getDuplicateMetricId(description)).increment();
@@ -101,17 +102,17 @@ public class PubsubMessageHandler {
     }
 
     String processingKey = makeProcessingKey(description, messageId);
-    log.info("******* processingKey ;{}",processingKey);
-    if (tryAck(processingKey, description.getAckDeadlineSeconds(), acknowledger, identifier)) {
-      log.info("Start of the create event and process with eventPropagator");
+    log.info("******* processingKey ;{}", processingKey);
+    boolean flag =
+        tryAck(processingKey, description.getAckDeadlineSeconds(), acknowledger, identifier);
+    log.info("******* tryAck:{}", flag);
+    if (flag) {
+      log.info("Event creator size :{}", eventCreators.size());
       for (EventCreator eventCreator : eventCreators) {
-        log.info("***** Event Creator :{}",eventCreator);
+        log.info("*****Start of the  Event Creator :{}", eventCreator);
         Event event = eventCreator.createEvent(description);
-        log.info("***** Start of the process event with eventPropagator ");
         eventPropagator.processEvent(event);
-        log.info("***** End of the process event with eventPropagator ");
       }
-      log.info("End of the create event and process with eventPropagator");
       setMessageComplete(
           completeKey, description.getMessagePayload(), description.getRetentionDeadlineSeconds());
       registry.counter(getProcessedMetricId(description)).increment();

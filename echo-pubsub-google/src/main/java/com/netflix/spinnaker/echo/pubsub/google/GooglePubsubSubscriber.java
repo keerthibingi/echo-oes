@@ -176,7 +176,9 @@ public class GooglePubsubSubscriber implements PubsubSubscriber {
       String messageId = message.getMessageId();
       Map<String, String> messageAttributes =
           message.getAttributesMap() == null ? new HashMap<>() : message.getAttributesMap();
-      log.debug(
+      log.info(" subscriptionName: :{}", subscriptionName);
+      log.info(" pubsub system :{}", pubsubSystem);
+      log.info(
           "Received Google pub/sub message with payload: {}\n and attributes: {}",
           messagePayload,
           messageAttributes);
@@ -192,10 +194,8 @@ public class GooglePubsubSubscriber implements PubsubSubscriber {
                   7 * 24 * 60 * 60) // Expire key after max retention time, which is 7 days.
               .build();
       GoogleMessageAcknowledger acknowledger = new GoogleMessageAcknowledger(consumer);
-      log.info("********** Start of the handle message -- pubsubMessageHandler");
       pubsubMessageHandler.handleMessage(
           description, acknowledger, identity.getIdentity(), messageId);
-      log.info("********** End of the handle message -- pubsubMessageHandler");
       log.info("********** End of the receive message -- GooglePubsubSubscriber");
     }
   }
