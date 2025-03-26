@@ -1,6 +1,7 @@
 FROM registry.access.redhat.com/ubi8/ubi:8.8 as java-builder
 
-ARG JAVA_PACKAGE=java-17-openjdk-jmods
+# ARG JAVA_PACKAGE=java-17-openjdk-jmods
+ARG JAVA_PACKAGE=java-17-openjdk-headless.x86_64
 RUN yum -y update && \
     yum -y install --nodocs ${JAVA_PACKAGE} && \
     yum clean all && \
