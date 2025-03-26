@@ -4,8 +4,7 @@ on:
   workflow_call:
   push:
     branches:
-    - oes-1.33.3X
-    - oes-1.33.x
+    - OES-1.33.x
 
 env:
   GRADLE_OPTS: -Dorg.gradle.daemon=false -Xmx6g -Xms6g
