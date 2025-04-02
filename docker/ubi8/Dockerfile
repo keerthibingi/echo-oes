@@ -7,5 +7,7 @@ RUN adduser spinnaker
 RUN mkdir -p /opt/echo/plugins
 RUN chmod -R 777 /opt/echo/plugins/
 RUN chown -R spinnaker:spinnaker /opt/
+RUN apk add --no-cache tar
+RUN apk add --no-cache python3 py3-pip
 USER spinnaker
 CMD ["/opt/echo/bin/echo"]
